@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_jsvmlib" default="compile.module.jsvmlib">
+  <dirname property="module.jsvmlib.basedir" file="${ant.file.module_jsvmlib}"/>
+  
+  <property name="module.jdk.home.jsvmlib" value=""/>
+  <property name="module.jdk.bin.jsvmlib" value=""/>
+  <property name="module.jdk.classpath.jsvmlib" value=""/>
+  
+  <property name="compiler.args.jsvmlib" value="-encoding GBK -source 8 ${compiler.args}"/>
+  
+  <property name="jsvmlib.output.dir" value="${module.jsvmlib.basedir}/bin"/>
+  <property name="jsvmlib.testoutput.dir" value="${module.jsvmlib.basedir}/bin"/>
+  
+  <path id="jsvmlib.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="jsvmlib.module.production.classpath"/>
+  
+  <path id="jsvmlib.runtime.production.module.classpath">
+    <pathelement location="${jsvmlib.output.dir}"/>
+  </path>
+  
+  <path id="jsvmlib.module.classpath">
+    <pathelement location="${jsvmlib.output.dir}"/>
+  </path>
+  
+  <path id="jsvmlib.runtime.module.classpath">
+    <pathelement location="${jsvmlib.output.dir}"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.jsvmlib">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.jsvmlib">
+    <patternset refid="excluded.from.module.jsvmlib"/>
+  </patternset>
+  
+  <path id="jsvmlib.module.sourcepath">
+    <dirset dir="${module.jsvmlib.basedir}">
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.jsvmlib" depends="compile.module.jsvmlib.production,compile.module.jsvmlib.tests" description="Compile module JSvmLib"/>
+  
+  <target name="compile.module.jsvmlib.production" depends="register.custom.compilers" description="Compile module JSvmLib; production classes">
+    <mkdir dir="${jsvmlib.output.dir}"/>
+    <javac2 destdir="${jsvmlib.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.jsvmlib}/javac">
+      <compilerarg line="${compiler.args.jsvmlib}"/>
+      <bootclasspath refid="jsvmlib.module.bootclasspath"/>
+      <classpath refid="jsvmlib.module.production.classpath"/>
+      <src refid="jsvmlib.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.jsvmlib"/>
+    </javac2>
+    
+    <copy todir="${jsvmlib.output.dir}">
+      <fileset dir="${module.jsvmlib.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.jsvmlib.tests" depends="register.custom.compilers,compile.module.jsvmlib.production" description="compile module JSvmLib; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.jsvmlib" description="cleanup module">
+    <delete dir="${jsvmlib.output.dir}"/>
+    <delete dir="${jsvmlib.testoutput.dir}"/>
+  </target>
+</project>
