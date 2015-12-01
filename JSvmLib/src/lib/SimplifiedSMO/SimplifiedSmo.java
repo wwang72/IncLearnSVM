@@ -250,7 +250,7 @@ public class SimplifiedSmo {
 	public static void main(String[] args) {
 		SimplifiedSmo simplifiedSMO = new SimplifiedSmo();
 		SVMFileReader reader = new SVMFileReader(".\\src\\lib\\SimplifiedSMO\\heart_scale");
-		SVMData svmData = reader.getSVMData(40);
+		SVMData svmData = reader.getSVMData(50);
 		
 		System.out.println("¿ªÊ¼ÑµÁ·...");
 		SVMModel model = simplifiedSMO.train(svmData.getX(), svmData.getY());
